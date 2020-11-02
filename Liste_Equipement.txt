@@ -1,0 +1,13 @@
+*******Liste du matériel********
+
+- Ordinateur portable
+- Pycom LoPy4
+- Capteur BME280 (température, humidité et pression)
+- Antenne LoRa
+- Fils de connexion (câble Mâle vers Femelle F2M AZDelivery Jumper Wire Cavalier) 
+- Câble USB
+
+*******Logiciels utilisés et plateforme web********
+
+- Atom IDE (code python)
+- LoRa Network Server (LNS), Ackl.io backoffice 
