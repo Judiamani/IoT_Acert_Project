@@ -8,7 +8,7 @@ sys.path.insert(1, '../udp/')
 from net_udp_core import *
 
 #from scapy.all import *
-#import scapy
+from scapy.all import *
 from gen_base_import import b2hex
 import binascii
 import gen_rulemanager as RM
@@ -42,6 +42,7 @@ comp = Compressor(debug_protocol)
 decomp = Decompressor(debug_protocol)
 
 # -------
+
 tunnel = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 event_queue = []
@@ -68,7 +69,7 @@ def send_coap_request():
     mid += 1
     token += 2
     event_queue.append([int(time.time())+10, send_coap_request])
-    return coap_msg
+    
 
 
 coap_ip_packet = bytearray(b"""`\
@@ -79,8 +80,33 @@ coap_ip_packet = bytearray(b"""`\
 2\x163\x00\x1e\x00\x00A\x02\x00\x01\n\xb3\
 foo\x03bar\x06ABCD==Fk=eth0\xff\x84\x01\
 \x82  &Ehello""")
-pk=p.parse(coap_ip_packet,T_DIR_UP)
-print(pk)
+
+# pk=p.parse(coap_ip_packet , T_DIR_UP)
+# print(pk)
+def envpkt(pkt):
+    global parser
+    global rm
+    epoch = int(time.time())
+    pkt_fields, data, err= p.parse(coap_ip_packet , T_DIR_UP)
+    print(pkt_fields)
+    print("data",data)
+    
+    if pkt_fields != None:
+            rule, device = rm.FindRuleFromPacket(pkt_fields, direction=T_DIR_UP)
+            print(rule)
+            if rule != None:
+                schc_pkt = comp.compress(rule, pkt_fields, data, T_DIR_UP)
+                print("schc",schc_pkt)
+                if device.find("udp") == 0:
+                    destination = (device.split(":")[1], int(device.split(":")[2]))
+                    print (destination)
+                    schc_pkt.display()
+                    tunnel.sendto(schc_pkt._content,("tests.openschc.net", 0x5C4C))
+                else:
+                    print ("unknown connector" + device)
+                tr=rm.FindRuleFromSCHCpacket(schc_pkt)
+                print("regle de dec",tr)
+
 def processPkt(pkt):
     global parser
     global rm
@@ -120,18 +146,20 @@ def processPkt(pkt):
 
     elif pkt.getlayer(IP).version == 6 : # regular IPv6trafic to be compression
 
-        pkt_fields, data, err = parse.parse( bytes(pkt), T_DIR_DW, layers=["IP", "ICMP"], start="IPv6")
-        print (pkt_fields)
+        pkt_fields, data, err = p.parse( bytearray((pkt)), T_DIR_DW, layers=["IP", "ICMP"], start="IPv6")
+        print ("champ",pkt_fields)
+        print ("data",data)
 
         if pkt_fields != None:
             rule, device = rm.FindRuleFromPacket(pkt_fields, direction=T_DIR_DW)
             if rule != None:
+                print("data",data)
                 schc_pkt = comp.compress(rule, pkt_fields, data, T_DIR_DW)
                 if device.find("udp") == 0:
                     destination = (device.split(":")[1], int(device.split(":")[2]))
                     print (destination)
                     schc_pkt.display()
-                    tunnel.sendto(schc_pkt._content, destination)
+                    tunnel.sendto(schc_pkt._content,"tests.openschc.net")
                 else:
                     print ("unknown connector" + device)
     else:
@@ -139,8 +167,24 @@ def processPkt(pkt):
 
 
 #pkt=send_coap_request()
-processPkt(pkt)
-print(pkt)
+ip=IP(dst="83.199.26.128",version=6)
+udp=UDP(dport=8888)
+ld=b"""`\
+\x12\x34\x56\x00\x1e\x11\x1e\xfe\x80\x00\
+\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\
+\x00\x00\x01\xfe\x80\x00\x00\x00\x00\x00\
+\x00\x00\x00\x00\x00\x00\x00\x00\x02\x16\
+2\x163\x00\x1e\x00\x00A\x02\x00\x01\n\xb3\
+foo\x03bar\x06ABCD==Fk=eth0\xff\x84\x01\
+\x82  &Ehello"""
+t="hello"
+c=ip/udp
+#c=bytearray(c)
+envpkt(coap_ip_packet)
+
+#print("packet construit",c)
+#processPkt(c)
+#print(c)
 # look at the IP address to define sniff behavior
 
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
