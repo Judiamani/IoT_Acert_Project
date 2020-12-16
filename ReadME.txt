@@ -21,3 +21,5 @@ Les différents programmes (python) utilisés:
 
 Ces programmes permettent en quelque sorte au Pycom (le client) d'envoyer les données sérialisées en CBOR du capteur BME280 vers 
 le serveur de ressource en utilisant le protocole d'application CoAP et le reseau LoRa.
+
+-schc_ex.py,pour l'envoi de paquet schc vers un serveur avec les websocket(dans notre cas "tests.openschc.net")
