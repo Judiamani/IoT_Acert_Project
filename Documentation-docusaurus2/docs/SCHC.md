@@ -251,7 +251,14 @@ Par exemple, pour une Window n'étant pas la dernière, `11101` signifie que sur
 - Les Tiles n'ont pas nécessairement la même taille.
 
 - A l'exception de la dernière, les Tiles doivent avoir une taille telle qu'il n'y ait pas besoin de padding
+
 #### Ack-on-Error
 
+- Chaque Fragment contient 1 Window dans sa charge utile.
 
+- Les Windows sont utilisées
+
+- A l'exception des 2 dernières, les Tiles doivent avoir la même taille.
+
+-
 ---
