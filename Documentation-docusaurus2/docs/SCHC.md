@@ -254,11 +254,11 @@ Par exemple, pour une Window n'étant pas la dernière, `11101` signifie que sur
 
 #### Ack-on-Error
 
-- Chaque Fragment contient 1 Window dans sa charge utile.
+- Chaque Fragment contient une ou plusieurs Tiles consécutives dans sa charge utile.
+
+- Des ACK négatifs sont émis par le récepteur après l'envoi de chaque Window
 
 - Les Windows sont utilisées
 
-- A l'exception des 2 dernières, les Tiles doivent avoir la même taille.
-
--
+- A l'exception des 2 dernières, les Tiles doivent avoir la même taille. Les 2 dernières Tiles sont plus petites que les autres.
 ---
