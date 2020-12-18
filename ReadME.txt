@@ -22,4 +22,14 @@ Les différents programmes (python) utilisés:
 Ces programmes permettent en quelque sorte au Pycom (le client) d'envoyer les données sérialisées en CBOR du capteur BME280 vers 
 le serveur de ressource en utilisant le protocole d'application CoAP et le reseau LoRa.
 
--schc_ex.py,pour l'envoi de paquet schc vers un serveur avec les websocket(dans notre cas "tests.openschc.net")
+---------TEST OPENSCHC------
+d'abord,il faut cloner le projet openschc sur le lien github suivant: https://github.com/openschc/openschc.git du coté client et serveur(une seule fois,si le test est en local)
+Pour les tests en local,on a eu a modifié quelques fichiers:
+il vous faut donc les remplacer avec les nouvelles versions presentes sur le github du projet
+openschc/examples/udp/net_udp_core.py
+openschc/src/gen_rulemanager.py
+openschc/src/compr_parser.py
+Ensuite ajoutez,les fichier gateway.py(coté serveur) schc_ex.py(coté client) dans le repertoire openschc/examples/
+il vous faut modifier la destination du paquet schc dans le fichier schc_ex.py(à la ligne 57)
+Enfin vous pouvez executer le fichier schc_ex.py sur le client et le gateway.py sur le serveur 
+
