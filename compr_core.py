@@ -290,7 +290,7 @@ class Compressor:
         Take a compression rule and a parsed packet and return a SCHC pkt
         """
        
-        print("header_length:",len(parsed_packet))
+        print("taille l'en-tête à compresser:",len(parsed_packet))
         assert direction in [T_DIR_UP, T_DIR_DW]
         output_bbuf = BitBuffer()
         # set ruleID first.
