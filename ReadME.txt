@@ -33,3 +33,7 @@ Ensuite ajoutez,les fichier gateway.py(coté serveur) schc_ex.py(coté client) d
 il vous faut modifier la destination du paquet schc dans le fichier schc_ex.py(à la ligne 57)
 Enfin vous pouvez executer le fichier schc_ex.py sur le client et le gateway.py sur le serveur 
 
+--------- DOCUMENTATION ------
+
+https://docusaurus-documentation-openschc.netlify.app/
+
